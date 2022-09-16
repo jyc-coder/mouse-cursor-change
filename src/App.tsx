@@ -10,24 +10,46 @@ const cursors: Cursor[] = ["cursor1", "cursor2", "cursor3", "cursor4"];
 function App() {
   const [selectedCursor, setSelectedCursor] = useState<Cursor>("cursor1");
   const [cursorPosition, setCursorPosition] = useState([0, 0]);
+  const [calibratedCursorPosition, setCalibratedCursorPosition] = useState([
+    0, 0,
+  ]);
 
   useEffect(() => {
     const event = ({ clientX, clientY }: MouseEvent) => {
       setCursorPosition([clientX, clientY]);
+      const pos = [clientX, clientY];
+      switch (selectedCursor) {
+        case "cursor1":
+          pos[0] -= 1;
+          pos[1] -= 2;
+          break;
+        case "cursor2":
+          pos[0] -= 28;
+          break;
+        case "cursor3":
+          pos[0] -= 16;
+          pos[1] -= 17;
+          break;
+        case "cursor4":
+          pos[0] -= 5;
+          pos[1] -= 4;
+          break;
+      }
+      setCalibratedCursorPosition(pos);
       console.log(clientX, clientY);
     };
     window.addEventListener("mousemove", event);
 
     return () => window.removeEventListener("mousemove", event);
-  }, []);
+  }, [selectedCursor]);
   return (
     <>
       <img
         style={{
           pointerEvents: "none",
           position: "fixed",
-          left: cursorPosition[0],
-          top: cursorPosition[1],
+          left: calibratedCursorPosition[0],
+          top: calibratedCursorPosition[1],
           width: "50px",
         }}
         src={`/images/${selectedCursor}.png`}
@@ -47,7 +69,28 @@ function App() {
         {/*버튼 목록*/}
         {cursors.map((cursor) => (
           <Button
-            onClick={() => setSelectedCursor(cursor)}
+            onClick={() => {
+              const pos = cursorPosition;
+              switch (selectedCursor) {
+                case "cursor1":
+                  pos[0] -= 1;
+                  pos[1] -= 2;
+                  break;
+                case "cursor2":
+                  pos[0] -= 28;
+                  break;
+                case "cursor3":
+                  pos[0] -= 16;
+                  pos[1] -= 17;
+                  break;
+                case "cursor4":
+                  pos[0] -= 5;
+                  pos[1] -= 4;
+                  break;
+              }
+              setCalibratedCursorPosition(pos);
+              setSelectedCursor(cursor);
+            }}
             selected={selectedCursor === cursor}
             name={cursor}
             key={cursor}
