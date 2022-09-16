@@ -10,6 +10,7 @@ const Button = ({ selected, name, onClick }: ButtonProps) => {
   return (
     <div
       style={{
+        /*  cursor: "pointer", */
         boxSizing: "border-box",
         width: "100px",
         height: "100px",
